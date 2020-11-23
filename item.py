@@ -1,7 +1,3 @@
-# class item:
-#     def __init__(self, name, desc):
-#         self.name = name 
-#         self.desc = desc
 class item:
 	def __init__(self, name, desc, itemType):
 		self.name = name 

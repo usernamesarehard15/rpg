@@ -1,7 +1,9 @@
 import item
-import player
+import player as Player
+import map
 
-player = player.player(100,item.apple(),item.bandages())
-while True:
-	player.action(input())
-	print()
+player = Player.player
+
+player.printMap(map.map, 0)
+
+
