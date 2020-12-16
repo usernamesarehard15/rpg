@@ -17,7 +17,24 @@ class enemy():
         self.alive = True
         self.deathMessage = death
 
-    def kill(self):
+    def kill(self, player):
         print(self.deathMessage)
         self.alive = False
+        player.inCombat = False
 
+    def heal(self, amount, player):
+        self.health += amount
+        if (self.health > self.maxHealth):
+            self.health = self.maxHealth
+        elif (self.health <= 0):
+            self.kill(player)
+
+
+class ghost(enemy):
+    def __init__(self):
+        enemy.__init__(self, 'ghost', 'You encounter a ghost',
+                       'The ghost disapears into a puff of smoke', 15, 3)
+
+    def special(self):
+        print('The ghost rests and heals a bit')
+        self.heal(3)

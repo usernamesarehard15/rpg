@@ -32,6 +32,10 @@ class enemyTile(mapTile):
 
     def enter(self, player):
         mapTile.enter(self, player)
+        if (self.enemy.alive):
+            player.inCombat = True
+        print(self.enemy.desc)
+        self.enemy.heal(-1000, player)
 
 
 class treasureTile(mapTile):
@@ -66,6 +70,36 @@ class trapTile(mapTile):
             self.armed = False
 
 
+class stairTile(mapTile):
+    """mapTile with an option to move between floors"""
+    def __init__(self, exitFloor, exitX, exitY):
+        mapTile.__init__(self, 'stair',
+                         'Theres a stairway down to the inside of the temple ',
+                         '\\')
+        self.exitX = exitX
+        self.exitY = exitY
+        self.exitFloor = exitFloor
+
+    def enter(self, player):
+        mapTile.enter(self, player)
+        print('Use move downstairs to enter')
+        print('WARNING: once you enter there is no escape')
+
+
+class winTile(mapTile):
+    """mapTile that ends the game when found"""
+    def __init__(self):
+        mapTile.__init__(self, 'win', '', ' ')
+
+    def enter(self, player):
+        print('You enter a room full of gold!')
+        print('In the middle there is a gem encrusted mask')
+        print('You take it and traps spring up as you rush out')
+        print('narrowly avoiding death you escape')
+        print('YOU WIN!')
+        player.playing = False
+
+
 # map class
 class map():
     """map class for handling map things"""
@@ -85,10 +119,14 @@ class map():
 
         # Add Special Rooms
         self.replaceTile(treasureTile('Theres a tree with an apple on it',
-                         item.apple()), 0, 1, 0)
+                                      item.apple()), 0, 1, 0)
         self.replaceTile(trapTile('Just more regular trees?',
-                        'A volley of arrows shoot from the tree',
-                         10), 0, 1, 2)
+                                  'A volley of arrows shoot from the tree',
+                                  10), 0, 1, 2)
+        self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
+                         0, 1, 1)
+        self.replaceTile(stairTile(1, 0, 0), 0, 4, 4)
+        self.replaceTile(winTile(), 1, 4, 4)
 
     def getTile(self, floor, x, y):
         return self.map[floor][x][y]

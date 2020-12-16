@@ -36,7 +36,7 @@ class actMap(action):
         if (player.floor == 0):
             mapCol = (0, 1, 0)
         elif (player.floor == 1):
-            mapCol = (5, 5, 5)
+            mapCol = (2, 1, 0)
         else:
             mapCol = (5, 5, 5)
 
@@ -77,6 +77,7 @@ class actMap(action):
             'T - Treasure',
             'X - Trap',
             'P - Player',
+            '\ - Stair',
             '* - Empty',
             sep='\n')
 
@@ -87,7 +88,22 @@ class actMove(action):
         action.__init__(self, 'Move', aliases)
 
     def run(self, player, args):
-        # Check if first argument exists and is a valid argument
+        # Check if player is in combat
+        if (player.inCombat):
+            print('Can\'t Move in combat!')
+            return
+        # Check if first argument exists
+        if (len(args) < 1):
+            print('Invalid arguments! Example usage: move up')
+            return
+        # Check if trying to use stair tile
+        tile = player.map.getTile(player.floor, player.x, player.y)
+        if (tile.type == 'stair' and
+                args[0] == 'downstairs'):
+            player.move(tile.exitFloor, tile.exitX, tile.exitY)
+            return
+
+        # Check if argument is valid
         # Argument is valid if the first character of it is in directions
         directions = ('u', 'd', 'l', 'r')
         if (len(args) < 1 or not args[0][0] in directions):
@@ -112,9 +128,10 @@ class player:
         self.x = x
         self.y = y
         self.inv = inventory([item for item in items])
-        self.alive = True
         self.actions = [actInventory(), actMap(), actMove()]
         self.map = Map.map(self)
+        self.playing = True
+        self.inCombat = False
 
     def heal(self, amount):
         self.health += amount
@@ -147,18 +164,24 @@ class player:
         if (0 <= y < self.map.size and
                 0 <= x < self.map.size and
                 0 <= floor < len(self.map.map)):
+            # move
             self.x = x
             self.y = y
             self.floor = floor
 
-        # initilize room
-        self.map.getTile(self.floor, self.x, self.y).enter(self)
+            # initilize room
+            self.map.getTile(self.floor, self.x, self.y).enter(self)
 
-    def combat(self): # TODO finish
+    def combat(self):  # TODO finish
         print('')
 
-    def kill(self): # TODO finish
-        print('uh oh not finished stuff woops')
+    def kill(self):
+        print('YOU DIED')
+        player.playing = False
+
+    def win(self):
+        print('YOU WIN')
+        player.playing = False
 
     def printActions(self):
         print('Action List:')
