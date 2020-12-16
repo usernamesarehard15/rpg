@@ -11,12 +11,6 @@ class weapon(item):
         self.damage = damage
 
 
-class armour(item):
-    def __init__(self, name, desc, defence):
-        item.__init__(self, name, desc, 'armour')
-        self.defence = defence
-
-
 class consumable(item):
     def __init__(self, name, desc, health):
         item.__init__(self, name, desc, 'consumable')
@@ -31,4 +25,9 @@ class apple(consumable):
 class bandages(consumable):
     def __init__(self):
         consumable.__init__(self, 'bandages', 'Bright Brown Banages', 25)
-        
+
+
+class woodenStick(weapon):
+    def __init__(self):
+        weapon.__init__(self, 'wooden stick',
+                        "A pointy stick, not the best for fighting", 4)
