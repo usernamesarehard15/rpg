@@ -1,6 +1,6 @@
 def colorStr(string, col):
     """Returns a coloured version of the input string
-    
+
     Keyword arguments:
     string -- input string
     col -- tuple of 3 ints from 0-5, representing the text colour
@@ -13,7 +13,7 @@ def colorStr(string, col):
 
 def colorStrBkr(string, col):
     """Returns the input string with a background colour
-    
+
     Keyword arguments:
     string -- input string
     col -- tuple of 3 ints from 0-5, representing the background colour
