@@ -34,22 +34,13 @@ class inventory:
         print(text)
 
     def sort(self):
-        # Make new lists of the names of the items to sort
-        # put weapons in weaponNames and consumables in consumablesNames
-        weaponNames = []
-        consumablesNames = []
+        # Make a new list of the names of the items to sort
+        itemNames = []
         for item in self.items:
-            if (item.type == 'weapon'):
-                weaponNames.append(item.name)
-            else:
-                consumablesNames.append(item.name)
-        weaponNames.sort()
-        consumablesNames.sort()
-        # replace inventory with sorted items from both lists
+            itemNames.append(item.name)
+        itemNames.sort()
+        # Convert item names back to itemNames
         sortedItems = []
-        for name in weaponNames:
+        for name in itemNames:
             sortedItems.append(self.get(name))
-        for name in consumablesNames:
-            sortedItems.append(self.get(name))
-
         self.items = sortedItems
