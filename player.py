@@ -151,8 +151,8 @@ class player:
             self.y = y
             self.floor = floor
 
-        # initilize room
-        self.map.getTile(self.floor, self.x, self.y).enter(self)
+            # initilize room
+            self.map.getTile(self.floor, self.x, self.y).enter(self)
 
     def combat(self): # TODO finish
         print('')
