@@ -3,7 +3,13 @@ import item
 
 
 class mapTile:
-    """base mapTile class to build with position, type and description"""
+    """base mapTile class to build with position, type and description
+
+    Arugments
+    tileType -- the type of the tile
+    desc -- description of tile
+    mapChar -- character of the tile when displayed on map
+    """
     def __init__(self, tileType, desc, mapChar):
         self.type = tileType
         self.desc = desc
@@ -11,26 +17,35 @@ class mapTile:
         self.mapChar = mapChar
 
     def enter(self, player):
+        # default enter function that displays the description and
+        # shows the tile on the
         self.hidden = False
         print(self.desc)
 
 
 class emptyTile(mapTile):
-    """mapTile with no special features"""
+    """mapTile with no special features
+
+    Arugments
+    desc -- description of tile
+    """
     def __init__(self, desc):
         mapTile.__init__(self, 'empty', desc, '*')
 
-    def enter(self, player):
-        mapTile.enter(self, player)
-
 
 class enemyTile(mapTile):
-    """mapTile with an enemy"""
+    """mapTile with an enemy
+
+    Arugments
+    desc -- description of tile
+    enemy -- the class for the enemy on the tile
+    """
     def __init__(self, desc, enemy):
         mapTile.__init__(self, 'enemy', desc, 'E')
         self.enemy = enemy
 
     def enter(self, player):
+        # Modified enter function for combat
         mapTile.enter(self, player)
         if (self.enemy.alive):
             player.inCombat = True
@@ -38,13 +53,19 @@ class enemyTile(mapTile):
 
 
 class treasureTile(mapTile):
-    """mapTile with treasure"""
+    """mapTile with treasure
+
+    Arugments
+    desc -- description of tile
+    item -- the item obtained from the tile
+    """
     def __init__(self, desc, item):
         mapTile.__init__(self, 'treasure', desc, 'T')
         self.item = item
         self.looted = False
 
     def enter(self, player):
+        # Modified enter function to give treausre
         mapTile.enter(self, player)
         if (not self.looted):
             print(f'You got a {self.item.name}!')
@@ -53,7 +74,13 @@ class treasureTile(mapTile):
 
 
 class trapTile(mapTile):
-    """mapTile with a trap"""
+    """mapTile with treasure
+
+    Arugments
+    desc -- description of tile
+    trapMsg -- the message displayed when trap is set off
+    damage -- the damage of the trap
+    """
     def __init__(self, desc, trapMsg, damage):
         mapTile.__init__(self, 'trap', desc, 'X')
         self.armed = True
@@ -61,6 +88,7 @@ class trapTile(mapTile):
         self.trapMsg = trapMsg
 
     def enter(self, player):
+        # Modified enter function to damage player and display trapMsg
         mapTile.enter(self, player)
         if (self.armed):
             print(self.trapMsg, f'and dealt {self.damage} damage!')
@@ -70,7 +98,14 @@ class trapTile(mapTile):
 
 
 class stairTile(mapTile):
-    """mapTile with an option to move between floors"""
+    """mapTile to move between floors
+
+    Arugments
+    desc -- description of tile
+    exitFloor -- the floor the player is teleported to
+    exitX -- the x coord the player is teleported to
+    exitY -- the y coord the player is teleported to
+    """
     def __init__(self, exitFloor, exitX, exitY):
         mapTile.__init__(self, 'stair',
                          'Theres a stairway down to the inside of the temple ',
@@ -80,16 +115,17 @@ class stairTile(mapTile):
         self.exitFloor = exitFloor
 
     def enter(self, player):
+        # Modified enter function to display text
         mapTile.enter(self, player)
         print('Use move downstairs to enter')
         print('WARNING: once you enter there is no escape')
 
-# map class
+
 class map():
-    """map class for handling map things"""
-    def __init__(self, player):
+    """map class to contain tiles and map related functions"""
+    def __init__(self):
         self.size = 5
-        # Make map of empty
+        # Make 5x5 map of empty tiles with 2 floors
         self.map = [[], []]
         for x in range(0, self.size):
             self.map[0].append([emptyTile('Just more trees here')
@@ -97,9 +133,6 @@ class map():
         for x in range(0, self.size):
             self.map[1].append([emptyTile('An empty temple room')
                                 for i in range(0, self.size)])
-
-        # Initialize first room
-        self.getTile(0, 0, 0).enter(player)
 
         # Add special rooms for floor 1
         self.replaceTile(treasureTile('Theres a tree with an apple on it',
@@ -151,10 +184,14 @@ class map():
         self.replaceTile(trapTile('The walls are covered in faces',
                                   'Arrows come from their mouths',
                                   20), 1, 3, 0)
+        
+        self.replaceTile(stairTile(1, 2, 2), 0, 0, 0)
 
     def getTile(self, floor, x, y):
+        # simple function to get a tile form coordinates
         return self.map[floor][x][y]
 
     def replaceTile(self, newTile, floor, x, y):
+        # function to replace a tile with a new one
         del self.map[floor][x][y]
         self.map[floor][x].insert(y, newTile)

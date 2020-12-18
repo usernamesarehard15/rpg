@@ -36,3 +36,7 @@ v0.7
 v1.0
 - Put all treasure, trap, and enemy tiles in the correct place
 - Added story text at start of game
+
+v1.1
+- tell player when movement was unsuccessful
+- fixed bug where player health would display after losing

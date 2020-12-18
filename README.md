@@ -1,6 +1,8 @@
 # Temple Raider
 
 Temple Raider is a Python text-based adventure game.
+In it you will fight unique monsters, encounter traps and find treasures
+Target audience: Teenage audiences
 
 ## Installation
 
@@ -12,10 +14,23 @@ Python 3.8 is needed to play this game. Go to the [Python downloads page](https:
 python main.py
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## How to play
 
-Please make sure to update tests as appropriate.
+To play the game read the text and enter actions for your player to do
+#### EXAMPLES:
+- move right
+- show inventory
+- use sword (combat only)
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+
+## How to quit
+
+you can quit by either
+- Pressing ctrl+c
+- Closing the program
+
+## Tips
+
+- Not exploring the full map might mean you miss gear
+- Most commands have shortcuts (for example move down -> m d)
+- Use healing wisely

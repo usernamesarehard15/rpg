@@ -4,7 +4,6 @@ class inventory:
     Arugments
     items -- array of items, blank for no items (default = [])
     """
-
     def __init__(self, items=[]):
         self.items = items
 

@@ -1,5 +1,6 @@
 import random
 
+
 class enemy():
     """ base enemy class to be inherted
 
@@ -22,15 +23,17 @@ class enemy():
         self.specialChance = specialChance
 
     def kill(self, player):
+        # mark self as dead, exit combat, print death message
         print(self.deathMessage)
         self.alive = False
         player.inCombat = False
 
     def heal(self, amount, player):
+        # Heal/damage enemy and then confine it to valid values
         self.health += amount
-        if (self.health > self.maxHealth):
-            self.health = self.maxHealth
-        elif (self.health <= 0):
+        self.health = max(0, min(self.health, self.maxHealth))
+        # Kill enemy if health is less than 0
+        if (self.health <= 0):
             self.kill(player)
 
     def attack(self, player):
@@ -41,33 +44,38 @@ class enemy():
             print(f'{self.name.title()} dealt {self.damage} damage')
             player.heal(-self.damage)
 
+
 class ghost(enemy):
     def __init__(self):
         enemy.__init__(self, 'ghost', 'You encounter a ghost',
-                       'The ghost disapears into a puff of smoke', 6 , 15, 0.25)
+                       'The ghost disapears into a puff of smoke',
+                       6, 15, 0.25)
 
     def special(self, player):
         print('The ghost rests and heals a bit')
         self.heal(5, player)
 
+
 class livingTree(enemy):
     def __init__(self):
         enemy.__init__(self, 'living tree', 'A tree starts to move?',
-                       'The tree stiffens in place and stops moving', 10 , 30, 0.33)
+                       'The tree stiffens in place and stops moving',
+                       10, 30, 0.33)
 
     def special(self, player):
         print('The trees branches grow thicker')
-        self.damage *= 1.5 
+        self.damage *= 1.5
+
 
 class templeGuardian(enemy):
     def __init__(self):
-        enemy.__init__(self, 'temple guardian', 
-                        'A man of bricks holding a spear approaches you',
-                       'The bricks collapse into a pile', 15 , 45, 0.2)
+        enemy.__init__(self, 'temple guardian',
+                       'A man of bricks holding a spear approaches you',
+                       'The bricks collapse into a pile', 15, 45, 0.2)
         self.charged = False
 
     def attack(self, player):
-        # check if charge attack before doing normal attack function 
+        # check if charge attack before doing normal attack function
         if (self.charged):
             print('The guardian\'s staff\'s light becomes blinding')
             print(f'{self.name.title()} dealt {self.damage*2} damage')
@@ -81,18 +89,21 @@ class templeGuardian(enemy):
         print('The staff starts glowing...')
         self.charged = True
 
+
 class templeGolem(enemy):
     def __init__(self):
-        enemy.__init__(self, 'temple golem', 
+        enemy.__init__(self, 'temple golem',
                        ('A massive golem stands infront of you'
-                       '\nIt appears to be powered by a glowing gem in its chest'),
-                       'The golem collapses leaving the glowing gem', 15, 100, 0.25)
+                        '\nIt appears to be powered by '
+                        'a glowing gem in its chest'),
+                       'The golem collapses leaving the glowing gem',
+                       15, 100, 0.25)
 
     def special(self, player):
         print('Flame flys out the golems mouth')
         print(f'{self.name.title()} dealt {self.damage*3} damage')
         player.heal(-3*self.damage)
-    
+
     def kill(self, player):
         enemy.kill(self, player)
         player.win()

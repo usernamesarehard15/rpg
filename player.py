@@ -5,12 +5,16 @@ import color as col
 
 
 class action:
+    """Base action class
+    Every action should have a run function to execute the action
+    """
     def __init__(self, name, aliases):
         self.name = name
         self.aliases = aliases
 
 
 class actInventory(action):
+    """Action for displaying your players inventory"""
     def __init__(self):
         aliases = ('show inventory', 'show inv', 'inventory', 'inv', 'i')
         action.__init__(self, 'Show inventory', aliases)
@@ -27,6 +31,7 @@ class actInventory(action):
 
 
 class actMap(action):
+    """Action for displaying the map"""
     def __init__(self):
         aliases = ('show map', 'show m', 'map', 'ma')
         action.__init__(self, 'Show map', aliases)
@@ -83,6 +88,7 @@ class actMap(action):
 
 
 class actMove(action):
+    """Action for moving the player"""
     def __init__(self):
         aliases = ('move', 'mov', 'mo', 'm')
         action.__init__(self, 'Move', aliases)
@@ -110,16 +116,21 @@ class actMove(action):
             print('Invalid arguments! Example usage: move up')
             return
         # Move player based on direction input
+        # Tell player if movement was not succesful
         if (args[0][0] == directions[0]):
-            player.move(player.floor, player.x, player.y-1)
+            success = player.move(player.floor, player.x, player.y-1)
         elif (args[0][0] == directions[1]):
-            player.move(player.floor, player.x, player.y+1)
+            success = player.move(player.floor, player.x, player.y+1)
         elif (args[0][0] == directions[2]):
-            player.move(player.floor, player.x-1, player.y)
+            success = player.move(player.floor, player.x-1, player.y)
         elif (args[0][0] == directions[3]):
-            player.move(player.floor, player.x+1, player.y)
+            success = player.move(player.floor, player.x+1, player.y)
+        if (not success):
+            print('You cant go further in that direction')
+
 
 class actUse(action):
+    """Action for using items"""
     def __init__(self):
         aliases = ('use', 'u', 'eat', 'eat item')
         action.__init__(self, 'Use item', aliases)
@@ -136,7 +147,7 @@ class actUse(action):
             print('Item not found! Example usage: use bandages')
             return
         elif (item.type == 'consumable'):
-            #heal player, do combat turn if in combat, remove item
+            # heal player, do combat turn if in combat, remove item
             print(f'You healed {item.health} health!')
             player.heal(item.health)
             player.inv.remove(item.name)
@@ -145,10 +156,21 @@ class actUse(action):
         elif (item.type == 'weapon' and player.inCombat):
             # Get enemy and damage, then do combat turn
             print(f'You dealt {item.damage} damage')
-            player.map.getTile(player.floor, player.x, player.y).enemy.heal(-item.damage,                     player)
+            player.map.getTile(player.floor, player.x, player.y).enemy.heal(
+                -item.damage, player)
             player.combatTurn()
 
+
 class player:
+    """ base item class to inherit
+
+    Arugments
+    maxHealth -- maxHealth of the player
+    floor -- starting floor of the player
+    x -- starting x coord of the player
+    y -- starting y coord of the player
+    items -- arbritary amount of items the player starts with
+    """
     def __init__(self, maxHealth, floor, x, y, *items):
         self.maxHealth = maxHealth
         self.health = maxHealth
@@ -157,16 +179,15 @@ class player:
         self.y = y
         self.inv = inventory([item for item in items])
         self.actions = [actInventory(), actMap(), actMove(), actUse()]
-        self.map = Map.map(self)
+        self.map = Map.map()
         self.playing = True
         self.inCombat = False
 
     def heal(self, amount):
+        # Heal/damage enemy and then confine it to valid values
         self.health += amount
-        if self.health > self.maxHealth:
-            self.health = self.maxHealth
-        elif self.health <= 0:
-            player.health = 0
+        self.health = max(0, min(self.health, self.maxHealth))
+        if self.health <= 0:
             player.kill(self)
 
     def action(self, playerInput):
@@ -190,6 +211,7 @@ class player:
 
     def move(self, floor, x, y):
         # move player if not out of bounds
+        # return true if succesful and false if not
         if (0 <= y < self.map.size and
                 0 <= x < self.map.size and
                 0 <= floor < len(self.map.map)):
@@ -201,7 +223,12 @@ class player:
             # initilize room
             self.map.getTile(self.floor, self.x, self.y).enter(self)
 
+            return True
+        else:
+            return False
+
     def combatTurn(self):
+        # Get enemy
         enemy = self.map.getTile(self.floor, self.x, self.y).enemy
         # Exit combat if enemy is dead
         if (not enemy.alive):
@@ -209,6 +236,9 @@ class player:
             return
         # Do enemy attack
         enemy.attack(self)
+        # Dont display health if player is dead
+        if (not self.playing):
+            return
         # Print player health
         print('Your health ', end='')
         for i in range(0, math.floor(self.health / 10)):
@@ -220,24 +250,27 @@ class player:
         print(f'Enemy health ', end='')
         for i in range(0, math.floor(enemy.health / (enemy.maxHealth/10))):
             print(col.colorStr('❤ ', (5, 0, 0)), end='')
-        for i in range(0, math.floor((enemy.maxHealth - enemy.health) / (enemy.maxHealth/10))):
+        for i in range(0, math.floor((enemy.maxHealth - enemy.health) /
+                       (enemy.maxHealth/10))):
             print(col.colorStr('❤ ', (1, 1, 1)), end='')
         print(f'{enemy.health}/{enemy.maxHealth}')
 
-
-
     def kill(self):
+        # display text and end game
         print('YOU DIED')
         self.playing = False
 
     def win(self):
-        print('You pick up the gem and some treasures and stuff them in your bag')
+        # display text and end game
+        print('You pick up the gem and',
+              'some treasures and stuff them in your bag')
         print('As you rush out traps trigger nearly killing you')
         print('narrowly avoiding death you escape')
         print('YOU WIN!')
         self.playing = False
 
     def printActions(self):
+        # print all actions in a list
         print('Action List:')
         for act in self.actions:
             print('-', act.name)
