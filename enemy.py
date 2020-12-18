@@ -72,7 +72,7 @@ class templeGuardian(enemy):
             print('The guardian\'s staff\'s light becomes blinding')
             print(f'{self.name.title()} dealt {self.damage*2} damage')
             print('The light disapears')
-            player.heal(-2.0*self.damage)
+            player.heal(-2*self.damage)
             return
         else:
             enemy.attack(self, player)
@@ -80,3 +80,19 @@ class templeGuardian(enemy):
     def special(self, player):
         print('The staff starts glowing...')
         self.charged = True
+
+class templeGolem(enemy):
+    def __init__(self):
+        enemy.__init__(self, 'temple golem', 
+                       ('A massive golem stands infront of you'
+                       '\nIt appears to be powered by a glowing gem in its chest'),
+                       'The golem collapses leaving the glowing gem', 15, 100, 0.25)
+
+    def special(self, player):
+        print('Flame flys out the golems mouth')
+        print(f'{self.name.title()} dealt {self.damage*3} damage')
+        player.heal(-3*self.damage)
+    
+    def kill(self, player):
+        enemy.kill(self, player)
+        player.win()

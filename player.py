@@ -230,8 +230,11 @@ class player:
         player.playing = False
 
     def win(self):
-        print('YOU WIN')
-        player.playing = False
+        print('You pick up the gem and some treasures and stuff them in your bag')
+        print('As you rush out traps trigger nearly killing you')
+        print('narrowly avoiding death you escape')
+        print('YOU WIN!')
+        self.playing = False
 
     def printActions(self):
         print('Action List:')

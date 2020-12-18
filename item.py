@@ -36,6 +36,16 @@ class stick(weapon):
         weapon.__init__(self, 'stick',
                         "A pointy stick, not the best for fighting", 4)
 
+class axe(weapon):
+    def __init__(self):
+        weapon.__init__(self, 'axe',
+                        "An iron axe, pretty good for combat", 8)
+
+class sword(weapon):
+    def __init__(self):
+        weapon.__init__(self, 'sword',
+                        "Really good at killing things, what else is there to say?", 12)
+
 class oneHit(weapon):
     def __init__(self):
         weapon.__init__(self, 'one hit',

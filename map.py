@@ -84,21 +84,6 @@ class stairTile(mapTile):
         print('Use move downstairs to enter')
         print('WARNING: once you enter there is no escape')
 
-
-class winTile(mapTile):
-    """mapTile that ends the game when found"""
-    def __init__(self):
-        mapTile.__init__(self, 'win', '', ' ')
-
-    def enter(self, player):
-        print('You enter a room full of gold!')
-        print('In the middle there is a gem encrusted mask')
-        print('You take it and traps spring up as you rush out')
-        print('narrowly avoiding death you escape')
-        print('YOU WIN!')
-        player.playing = False
-
-
 # map class
 class map():
     """map class for handling map things"""
@@ -134,7 +119,9 @@ class map():
         print(self.getTile(0, 0, 2).enemy)
         print(self.getTile(0, 0, 3).enemy)
         self.replaceTile(stairTile(1, 0, 0), 0, 4, 4)
-        self.replaceTile(winTile(), 1, 4, 4)
+        self.replaceTile(enemyTile(
+                        'A massive room lined with treasures',
+                        enemy.templeGolem()), 1, 4, 4)
 
     def getTile(self, floor, x, y):
         return self.map[floor][x][y]
