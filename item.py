@@ -28,7 +28,7 @@ class bandages(consumable):
 
 class healthPotion(consumable):
     def __init__(self):
-        consumable.__init__(self, 'health potion', 'Fully heals you', 9999)
+        consumable.__init__(self, 'health potion', 'Fully heals you', 100)
 
 
 class stick(weapon):
@@ -49,4 +49,4 @@ class sword(weapon):
 class oneHit(weapon):
     def __init__(self):
         weapon.__init__(self, 'one hit',
-                        "you're not supposed to have this?", 9999)
+                        "How did you get this?", 9999)

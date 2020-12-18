@@ -101,27 +101,56 @@ class map():
         # Initialize first room
         self.getTile(0, 0, 0).enter(player)
 
-        # Add Special Rooms
+        # Add special rooms for floor 1
         self.replaceTile(treasureTile('Theres a tree with an apple on it',
-                                      item.apple()), 0, 1, 0)
+                                      item.apple()), 0, 0, 1)
+        self.replaceTile(treasureTile(
+                         'An adventures skeleton lays here, there may be some loot',
+                        item.bandages()), 0, 0, 4)
+        self.replaceTile(treasureTile(
+                         'An adventures skeleton lays here, there may be some loot',
+                        item.bandages()), 0, 3, 4)
+        self.replaceTile(treasureTile(
+                         'A lumberjacks skeleton lays here, axe in hand',
+                        item.axe()), 0, 3, 2)
+        self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
+                         0, 0, 3)
+        self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
+                         0, 2, 0)
+        self.replaceTile(enemyTile('Just more trees here', enemy.livingTree()),
+                         0, 3, 3)
         self.replaceTile(trapTile('Just more regular trees?',
                                   'A volley of arrows shoot from the tree',
-                                  10), 0, 1, 2)
-        self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
-                         0, 0, 1)
-        self.replaceTile(enemyTile('Just more trees here', enemy.livingTree()),
-                         0, 0, 2)
+                                  10), 0, 2, 4)
+        self.replaceTile(stairTile(1, 0, 0), 0, 4, 4)
+
+        # Add special rooms for floor 2
+        self.replaceTile(treasureTile(
+                         'A powerful sword rests on a pedistal', item.sword()), 1, 1, 1)
+        self.replaceTile(treasureTile(
+                         'A chest in this room has a potion',
+                         item.healthPotion()), 1, 0, 4)
+        self.replaceTile(treasureTile(
+                         'A chest in this room has a potion',
+                         item.healthPotion()), 1, 4, 0)
         self.replaceTile(enemyTile(
                         'A temple room with skeletons resting against the walls',
                         enemy.templeGuardian()),
-                         0, 0, 3)
-        print(self.getTile(0, 0, 1).enemy)
-        print(self.getTile(0, 0, 2).enemy)
-        print(self.getTile(0, 0, 3).enemy)
-        self.replaceTile(stairTile(1, 0, 0), 0, 4, 4)
+                         1, 0, 3) 
+        self.replaceTile(enemyTile(
+                        'A temple room with skeletons resting against the walls',
+                        enemy.templeGuardian()),
+                         1, 2, 2) 
+        self.replaceTile(enemyTile(
+                        'A temple room with skeletons resting against the walls',
+                        enemy.templeGuardian()),
+                         1, 4, 1) 
         self.replaceTile(enemyTile(
                         'A massive room lined with treasures',
                         enemy.templeGolem()), 1, 4, 4)
+        self.replaceTile(trapTile('The walls are covered in faces',
+                                  'Arrows come from their mouths',
+                                  20), 1, 3, 0)
 
     def getTile(self, floor, x, y):
         return self.map[floor][x][y]

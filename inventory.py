@@ -30,7 +30,7 @@ class inventory:
             print('Inventory Empty')
         else:
             for item in self.items:
-                text += f'\n-{item.name.title()}'
+                text += f'\n-{item.name.title()}\n\t{item.desc}'
         print(text)
 
     def sort(self):
