@@ -97,7 +97,7 @@ class templeGolem(enemy):
                         '\nIt appears to be powered by '
                         'a glowing gem in its chest'),
                        'The golem collapses leaving the glowing gem',
-                       15, 100, 0.25)
+                       15, 80, 0.1)
 
     def special(self, player):
         print('Flame flys out the golems mouth')

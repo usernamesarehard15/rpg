@@ -138,14 +138,16 @@ class map():
         self.replaceTile(treasureTile('Theres a tree with an apple on it',
                                       item.apple()), 0, 0, 1)
         self.replaceTile(treasureTile(
-                         'An adventures skeleton lays here, there may be some loot',
-                        item.bandages()), 0, 0, 4)
+                         ('An adventures skeleton lays here,'
+                          ' there may be some loot'),
+                         item.bandages()), 0, 0, 4)
         self.replaceTile(treasureTile(
-                         'An adventures skeleton lays here, there may be some loot',
-                        item.bandages()), 0, 3, 4)
+                         ('An adventures skeleton lays '
+                          'here, there may be some loot'),
+                         item.bandages()), 0, 3, 4)
         self.replaceTile(treasureTile(
                          'A lumberjacks skeleton lays here, axe in hand',
-                        item.axe()), 0, 3, 2)
+                         item.axe()), 0, 3, 2)
         self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
                          0, 0, 3)
         self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
@@ -159,7 +161,8 @@ class map():
 
         # Add special rooms for floor 2
         self.replaceTile(treasureTile(
-                         'A powerful sword rests on a pedistal', item.sword()), 1, 1, 1)
+                         'A powerful sword rests on a pedistal',
+                         item.sword()), 1, 1, 1)
         self.replaceTile(treasureTile(
                          'A chest in this room has a potion',
                          item.healthPotion()), 1, 0, 4)
@@ -167,25 +170,26 @@ class map():
                          'A chest in this room has a potion',
                          item.healthPotion()), 1, 4, 0)
         self.replaceTile(enemyTile(
-                        'A temple room with skeletons resting against the walls',
+                        ('A temple room with skeletons'
+                         ' resting against the walls'),
                         enemy.templeGuardian()),
-                         1, 0, 3) 
+                         1, 0, 3)
         self.replaceTile(enemyTile(
-                        'A temple room with skeletons resting against the walls',
+                        ('A temple room with skeletons'
+                         ' resting against the walls'),
                         enemy.templeGuardian()),
-                         1, 2, 2) 
+                         1, 2, 2)
         self.replaceTile(enemyTile(
-                        'A temple room with skeletons resting against the walls',
+                        ('A temple room with skeletons '
+                         'resting against the walls'),
                         enemy.templeGuardian()),
-                         1, 4, 1) 
+                         1, 4, 1)
         self.replaceTile(enemyTile(
                         'A massive room lined with treasures',
                         enemy.templeGolem()), 1, 4, 4)
         self.replaceTile(trapTile('The walls are covered in faces',
                                   'Arrows come from their mouths',
                                   20), 1, 3, 0)
-        
-        self.replaceTile(stairTile(1, 2, 2), 0, 0, 0)
 
     def getTile(self, floor, x, y):
         # simple function to get a tile form coordinates
