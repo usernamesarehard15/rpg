@@ -8,7 +8,6 @@
   - Stair Tile
   - Movement
 - Game win and end
-- Equiping Armour
 
 # Beta
 - Story

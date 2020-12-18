@@ -166,7 +166,8 @@ class player:
         if self.health > self.maxHealth:
             self.health = self.maxHealth
         elif self.health <= 0:
-            player.kill()
+            player.health = 0
+            player.kill(self)
 
     def action(self, playerInput):
         # Parse action input into action (string) and arguments (list)
@@ -227,7 +228,7 @@ class player:
 
     def kill(self):
         print('YOU DIED')
-        player.playing = False
+        self.playing = False
 
     def win(self):
         print('You pick up the gem and some treasures and stuff them in your bag')

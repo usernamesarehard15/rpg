@@ -48,7 +48,7 @@ class ghost(enemy):
 
     def special(self, player):
         print('The ghost rests and heals a bit')
-        self.heal(3, player)
+        self.heal(5, player)
 
 class livingTree(enemy):
     def __init__(self):
