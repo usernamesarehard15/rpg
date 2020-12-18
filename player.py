@@ -119,6 +119,34 @@ class actMove(action):
         elif (args[0][0] == directions[3]):
             player.move(player.floor, player.x+1, player.y)
 
+class actUse(action):
+    def __init__(self):
+        aliases = ('use', 'u', 'eat', 'eat item')
+        action.__init__(self, 'Use item', aliases)
+
+    def run(self, player, args):
+        # Check the first argument exists
+        if (len(args) < 1):
+            print('Invalid arguments! Example usage: use bandages')
+            return
+        # Get the item
+        item = player.inv.get(' '.join(args))
+        # See if item is succesfully found and use item if it is
+        if (not item):
+            print('Item not found! Example usage: use bandages')
+            return
+        elif (item.type == 'consumable'):
+            #heal player, do combat turn if in combat, remove item
+            print(f'You healed {item.health} health!')
+            player.heal(item.health)
+            player.inv.remove(item.name)
+            if (player.inCombat):
+                player.combatTurn()
+        elif (item.type == 'weapon' and player.inCombat):
+            # Get enemy and damage, then do combat turn
+            print(f'You dealt {item.damage} damage')
+            player.map.getTile(player.floor, player.x, player.y).enemy.heal(-item.damage,                     player)
+            player.combatTurn()
 
 class player:
     def __init__(self, maxHealth, floor, x, y, *items):
@@ -128,7 +156,7 @@ class player:
         self.x = x
         self.y = y
         self.inv = inventory([item for item in items])
-        self.actions = [actInventory(), actMap(), actMove()]
+        self.actions = [actInventory(), actMap(), actMove(), actUse()]
         self.map = Map.map(self)
         self.playing = True
         self.inCombat = False
@@ -172,8 +200,30 @@ class player:
             # initilize room
             self.map.getTile(self.floor, self.x, self.y).enter(self)
 
-    def combat(self):  # TODO finish
-        print('')
+    def combatTurn(self):
+        enemy = self.map.getTile(self.floor, self.x, self.y).enemy
+        # Exit combat if enemy is dead
+        if (not enemy.alive):
+            self.inCombat = False
+            return
+        # Do enemy attack
+        enemy.attack(self)
+        # Print player health
+        print('Your health ', end='')
+        for i in range(0, math.floor(self.health / 10)):
+            print(col.colorStr('❤ ', (5, 0, 0)), end='')
+        for i in range(0, math.floor((self.maxHealth - self.health) / 10)):
+            print(col.colorStr('❤ ', (1, 1, 1)), end='')
+        print(f'{self.health}/{self.maxHealth}')
+        # Print enemy health
+        print(f'Enemy health ', end='')
+        for i in range(0, math.floor(enemy.health / (enemy.maxHealth/10))):
+            print(col.colorStr('❤ ', (5, 0, 0)), end='')
+        for i in range(0, math.floor((enemy.maxHealth - enemy.health) / (enemy.maxHealth/10))):
+            print(col.colorStr('❤ ', (1, 1, 1)), end='')
+        print(f'{enemy.health}/{enemy.maxHealth}')
+
+
 
     def kill(self):
         print('YOU DIED')

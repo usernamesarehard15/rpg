@@ -28,14 +28,13 @@ class enemyTile(mapTile):
     """mapTile with an enemy"""
     def __init__(self, desc, enemy):
         mapTile.__init__(self, 'enemy', desc, 'E')
-        mapTile.enemy = enemy
+        self.enemy = enemy
 
     def enter(self, player):
         mapTile.enter(self, player)
         if (self.enemy.alive):
             player.inCombat = True
         print(self.enemy.desc)
-        self.enemy.heal(-1000, player)
 
 
 class treasureTile(mapTile):
@@ -124,7 +123,16 @@ class map():
                                   'A volley of arrows shoot from the tree',
                                   10), 0, 1, 2)
         self.replaceTile(enemyTile('The trees are dying here', enemy.ghost()),
-                         0, 1, 1)
+                         0, 0, 1)
+        self.replaceTile(enemyTile('Just more trees here', enemy.livingTree()),
+                         0, 0, 2)
+        self.replaceTile(enemyTile(
+                        'A temple room with skeletons resting against the walls',
+                        enemy.templeGuardian()),
+                         0, 0, 3)
+        print(self.getTile(0, 0, 1).enemy)
+        print(self.getTile(0, 0, 2).enemy)
+        print(self.getTile(0, 0, 3).enemy)
         self.replaceTile(stairTile(1, 0, 0), 0, 4, 4)
         self.replaceTile(winTile(), 1, 4, 4)
 

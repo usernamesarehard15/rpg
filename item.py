@@ -19,15 +19,24 @@ class consumable(item):
 
 class apple(consumable):
     def __init__(self):
-        consumable.__init__(self, 'apple', 'Regular Red Apple', 5)
+        consumable.__init__(self, 'apple', 'Eating this might heal you a bit', 10)
 
 
 class bandages(consumable):
     def __init__(self):
-        consumable.__init__(self, 'bandages', 'Bright Brown Banages', 25)
+        consumable.__init__(self, 'bandages', 'Heals some pretty big wounds', 50)
 
-
-class woodenStick(weapon):
+class healthPotion(consumable):
     def __init__(self):
-        weapon.__init__(self, 'wooden stick',
+        consumable.__init__(self, 'health potion', 'Fully heals you', 9999)
+
+
+class stick(weapon):
+    def __init__(self):
+        weapon.__init__(self, 'stick',
                         "A pointy stick, not the best for fighting", 4)
+
+class oneHit(weapon):
+    def __init__(self):
+        weapon.__init__(self, 'one hit',
+                        "you're not supposed to have this?", 9999)

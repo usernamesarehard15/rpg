@@ -1,7 +1,7 @@
 import item
 import player as Player
 
-player = Player.player(100, 0, 0, 0, item.woodenStick(), item.apple())
+player = Player.player(100, 0, 0, 0, item.stick(), item.apple(), item.oneHit())
 
 while player.playing:
     player.printActions()
